@@ -1,0 +1,88 @@
+;
+; FduceMicrophoneDriver.inf
+;
+
+[Version]
+Signature="$WINDOWS NT$"
+Class=USBDevice
+ClassGuid={88BAE032-5A81-49f0-BC3D-A4FF138216D6}
+Provider=%ManufacturerName%
+CatalogFile=FduceMicrophoneDriver.cat
+DriverVer=
+PnpLockDown=1
+
+[DestinationDirs]
+DefaultDestDir = 12
+FduceMicrophoneDriver_Device_CoInstaller_CopyFiles = 11
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+FduceMicrophoneDriver.sys  = 1,,
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll=1 ; make sure the number matches with SourceDisksNames
+
+;*****************************************
+; Install Section
+;*****************************************
+
+[Manufacturer]
+%ManufacturerName%=Standard,NT$ARCH$
+
+[Standard.NT$ARCH$]
+%FduceMicrophoneDriver.DeviceDesc%=FduceMicrophoneDriver_Device, USB\VID_vvvv&PID_pppp
+
+[FduceMicrophoneDriver_Device.NT]
+CopyFiles=Drivers_Dir
+
+[Drivers_Dir]
+FduceMicrophoneDriver.sys
+
+[FduceMicrophoneDriver_Device.NT.HW]
+AddReg=FduceMicrophoneDriver_AddReg
+
+[FduceMicrophoneDriver_AddReg]
+; By default, USBDevice class uses iProduct descriptor to name the device in
+; Device Manager on Windows 8 and higher.
+; Uncomment for this device to use %DeviceName% on Windows 8 and higher:
+;HKR,,FriendlyName,,%FduceMicrophoneDriver.DeviceDesc%
+
+;-------------- Service installation
+[FduceMicrophoneDriver_Device.NT.Services]
+AddService = FduceMicrophoneDriver,%SPSVCINST_ASSOCSERVICE%, FduceMicrophoneDriver_Service_Inst
+
+; -------------- FduceMicrophoneDriver driver install sections
+[FduceMicrophoneDriver_Service_Inst]
+DisplayName    = %FduceMicrophoneDriver.SVCDESC%
+ServiceType    = 1               ; SERVICE_KERNEL_DRIVER
+StartType      = 3               ; SERVICE_DEMAND_START
+ErrorControl   = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary  = %12%\FduceMicrophoneDriver.sys
+
+;
+;--- FduceMicrophoneDriver_Device Coinstaller installation ------
+;
+
+[FduceMicrophoneDriver_Device.NT.CoInstallers]
+AddReg=FduceMicrophoneDriver_Device_CoInstaller_AddReg
+CopyFiles=FduceMicrophoneDriver_Device_CoInstaller_CopyFiles
+
+[FduceMicrophoneDriver_Device_CoInstaller_AddReg]
+HKR,,CoInstallers32,0x00010000, "WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll,WdfCoInstaller"
+
+[FduceMicrophoneDriver_Device_CoInstaller_CopyFiles]
+WdfCoInstaller$KMDFCOINSTALLERVERSION$.dll
+
+[FduceMicrophoneDriver_Device.NT.Wdf]
+KmdfService =  FduceMicrophoneDriver, FduceMicrophoneDriver_wdfsect
+[FduceMicrophoneDriver_wdfsect]
+KmdfLibraryVersion = $KMDFVERSION$
+
+[Strings]
+SPSVCINST_ASSOCSERVICE= 0x00000002
+ManufacturerName="<Your manufacturer name>" ;TODO: Replace with your manufacturer name
+ClassName="Universal Serial Bus devices"
+DiskName = "FduceMicrophoneDriver Installation Disk"
+FduceMicrophoneDriver.DeviceDesc = "FduceMicrophoneDriver Device"
+FduceMicrophoneDriver.SVCDESC = "FduceMicrophoneDriver Service"
+REG_MULTI_SZ = 0x00010000
