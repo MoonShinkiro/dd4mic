@@ -1,7 +1,7 @@
 # dd4mic
 Universal Kernal Mode Driver code for powering microphones written with VS driver framework
-
-```========================================================================
+```
+========================================================================
     FduceMicrophoneDriver Project Overview
 ========================================================================
 
@@ -55,4 +55,4 @@ Related WDK samples and what they demonstrate:
     osrusbfx2 - bulk/interrupt transfers, continuous readers
     usbsamp - isochronous transfers
 
-/////////////////////////////////////////////////////////////////////////////```
+/////////////////////////////////////////////////////////////////////////////
