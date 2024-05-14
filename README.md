@@ -5,7 +5,7 @@ Universal Kernal Mode Driver code for powering microphones written with VS drive
     FduceMicrophoneDriver Project Overview
 ========================================================================
 
-This file contains a summary of what you will find in each of the files that make up your project.
+This file contains a summary of what you will find in each of the files that make up the project.
 
 FduceMicrophoneDriver.vcxproj
     This is the main project file for projects generated using an Application Wizard. 
